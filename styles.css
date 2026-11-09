@@ -1,0 +1,142 @@
+/* Layout is generated from the Figma file at its 1280px design width,
+   then scaled to fit the browser window by script.js. */
+:root {
+  --jp: 'Noto Sans JP', 'Hiragino Sans', 'Yu Gothic', sans-serif;
+  --scale: 1;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: linear-gradient(90deg, #95cdff, #d2ebff);
+  font-family: 'DM Sans', var(--jp), sans-serif;
+  overflow-x: hidden;
+  transition: background 0.3s ease;
+  -webkit-font-smoothing: antialiased;
+}
+
+#viewport {
+  position: relative;
+  width: calc(1280px * var(--scale));
+  height: calc(9000px * var(--scale));
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+#stage {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1280px;
+  height: 9000px;
+  transform: scale(var(--scale));
+  transform-origin: 0 0;
+}
+
+/* ---------- Pages (pop color / original color) ---------- */
+.frame {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--dur, 300ms) ease, visibility 0s linear var(--dur, 300ms);
+}
+.frame.active {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity var(--dur, 300ms) ease, visibility 0s;
+}
+
+/* ---------- Generic Figma layers ---------- */
+.n {
+  position: absolute;
+  left: 0;
+  top: 0;
+  margin: 0;
+  transform-origin: 0 0;
+}
+.t {
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+  font-weight: inherit;
+}
+h2.t { font-weight: 900; }
+
+/* ---------- Interactive components (variants) ---------- */
+.instance > .variant {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity var(--dur, 0ms) ease, visibility 0s linear var(--dur, 0ms);
+}
+.instance > .variant.active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transition: opacity var(--dur, 0ms) ease, visibility 0s;
+}
+.variant[role="button"] { cursor: pointer; }
+.variant[role="button"]:focus { outline: none; }
+.variant[role="button"]:focus-visible { outline: 4px solid #1a1a1a; outline-offset: 6px; }
+
+/* Card hover feedback: lift the card slightly */
+.instance:has(> .variant[role="button"]) {
+  transition: translate 0.25s ease;
+}
+.instance:has(> .variant[role="button"]):hover { translate: 0 -6px; }
+
+/* Hover-swap portrait: crossfade both images while hovering */
+.instance.has-hover > .variant { pointer-events: auto; }
+
+/* ---------- Color toggle switch (iOS style, as in Figma) ----------
+   One toggle for the whole site. It starts in its Figma spot under the title,
+   then pins to the top of the screen while scrolling (positioned by script.js). */
+#color-toggle {
+  position: fixed;
+  z-index: 100;
+  left: 50%;
+  top: 0;
+  width: 64px;
+  height: 28px;
+  transform-origin: 50% 0;
+  transform: translateX(-50%) scale(var(--toggle-scale, 1));
+}
+#color-toggle.floating {
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.85), 0 6px 18px rgba(0, 0, 0, 0.25);
+}
+.toggle {
+  border: 0;
+  padding: 0;
+  border-radius: 100px;
+  background: rgba(120, 120, 128, 0.16);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.06);
+  cursor: pointer;
+  transition: background 0.25s ease, box-shadow 0.25s ease;
+}
+.toggle span {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 38px;
+  height: 24px;
+  border-radius: 100px;
+  background: #fff;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15), 0 3px 1px rgba(0, 0, 0, 0.06);
+  transition: transform 0.25s ease;
+}
+.toggle.on { background: #34c759; }
+.toggle.on span { transform: translateX(22px); }
+.toggle:focus-visible { outline: 3px solid #1a1a1a; outline-offset: 4px; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition-duration: 0ms !important; }
+  .instance:has(> .variant[role="button"]):hover { translate: none; }
+}
